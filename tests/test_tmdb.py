@@ -3,9 +3,9 @@ import unittest
 import movienamer.tmdb as tmdb
 
 
-class TMDbWrapperTest(unittest.TestCase):
+class TMDbTest(unittest.TestCase):
 
-    def test_wrapper_search(self):
+    def test_search(self):
         movies = tmdb.search('inception')
         self.assertIsInstance(movies, list)
         self.assertGreater(len(movies), 0)

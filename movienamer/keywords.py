@@ -11,8 +11,8 @@ print_keywords = [
     'camrip', 'cam rip', 'cam.rip', 'dvdscr', 'dvd scr', 'dvd.scr', 'hdrip',
     'hd rip', 'hd.rip', 'hdcam', 'hd cam', 'hd.cam', 'hddvd', 'hd dvd',
     'hd.dvd', 'bluray', 'blu ray', 'blu.ray', 'hdts', 'hd ts', 'hd.ts',
-    'telesync', 'hdtv', 'hd tv', 'hd.tv', 'r6', 'ts ', 'ts.', ' ts', '.ts',
-    'tvrip', 'tv rip', 'tv.rip', 'web-dl'
+    'telesync', 'hdtv', 'hd tv', 'hd.tv', 'ts ', 'ts.', ' ts', '.ts', 'tvrip',
+    'tv rip', 'tv.rip', 'web-dl', 'r4', 'r5', 'r6',
 ]
 
 case_insensitive_keywords = [

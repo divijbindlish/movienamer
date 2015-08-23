@@ -1,4 +1,4 @@
 __author__ = 'Divij Bindlish'
-__email__ = 'dvjbndlsh93@gmail.com'
+__email__ = 'me@divijbindlish.com'
 __version__ = '0.0.1'
 __license__ = 'MIT'

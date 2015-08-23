@@ -23,22 +23,21 @@ def _replace_roman_numerals(name):
     return name
 
 
-def get_year(name):
+def _get_year(name):
     if name is None or name == '':
         raise Exception
 
-    name = sanitize(name)
     if len(name.split(' ')) == 1:
-        return None
+        return (name, None)
 
     for pattern in year_extract_patterns:
         match = re.match(pattern, name)
         if match is not None:
             year = match.group('year')
             if int(year) >= 1900:
-                return int(year)
+                return (str(match.group('name')), int(year))
 
-    return None
+    return (name, None)
 
 
 def sanitize(name):
@@ -66,4 +65,4 @@ def sanitize(name):
     name = re.sub(' +', ' ', name)
     name = name.strip()
 
-    return name
+    return _get_year(name)

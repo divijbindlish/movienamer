@@ -55,7 +55,7 @@ def _gather(filename, directory=None, titles={}):
     # accumulate results from directory one level up
     if directory is not None:
         dirname = directory.split('/')[-1]
-        results_from_directory = identify(dirname)
+        results_from_directory = _gather(dirname)
 
         results_to_be_removed = []
 
@@ -74,13 +74,24 @@ def _gather(filename, directory=None, titles={}):
 
 
 def identify(filename, directory=None):
+    if directory == '' or directory == '.' or directory == '..':
+        directory = None
+
     results = _gather(filename, directory)
+    for i, result in enumerate(results):
+        # Add year to all the results
+        try:
+            results[i]['year'] = re.findall(
+                '[0-9]{4}', result['release_date'])[0]
+        except TypeError:
+            results[i]['year'] = None
+
     max_distance = 1 + max([result['distance'] for result in results])
     return sorted(
         results,
-        lambda r: (r['count'] ** 1.1) \
-            * ((max_distance - r['distance'])) \
-            * ((1 + r['with_year'])) \
-            * ((r['popularity'])),
+        key=lambda r: ((r['count'] ** 1.1) *
+                       ((max_distance - r['distance'])) *
+                       ((1 + r['with_year'])) *
+                       ((r['popularity']))),
         reverse=True
     )

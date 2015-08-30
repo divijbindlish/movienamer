@@ -1,6 +1,9 @@
 # movienamer
 
-> Command-line utility to organize movies
+> Command-line utility to properly name movies
+
+**movienamer** is inspired by the similarly named project
+[tvnamer](https://github.com/dbr/tvnamer).
 
 ## Installation
 

@@ -101,7 +101,7 @@ def _confirm_multiple(results, start, filename, extension):
 
     confirmation = raw_input(text).lower()
     if confirmation == '':
-        confirmation = start+1
+        confirmation = str(start+1)
 
     if confirmation == 'm' and 'm' in actions:
         return _confirm_multiple(results, start+N, filename, extension)
@@ -109,7 +109,7 @@ def _confirm_multiple(results, start, filename, extension):
     while confirmation not in actions:
         confirmation = raw_input(_final_line_multiple(len(results), start))
         if confirmation == '':
-            confirmation = start+1
+            confirmation = str(start+1)
 
         if confirmation == 'm' and 'm' in actions:
             return _confirm_multiple(results, start+N, filename, extension)

@@ -2,6 +2,8 @@
 
 > Command-line utility to properly name movies
 
+![Build Status](https://travis-ci.org/divijbindlish/movienamer.svg?branch=master)
+
 **movienamer** is inspired by the similarly named project
 [tvnamer](https://github.com/dbr/tvnamer).
 

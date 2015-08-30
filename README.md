@@ -20,8 +20,6 @@ Recursively rename movies present in a directory.
 $ movienamer -r ~/Videos/movies
 ```
 
-```
-
 ## Contributing
 
 Take a look at the open 

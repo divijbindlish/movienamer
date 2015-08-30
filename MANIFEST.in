@@ -1,1 +1,4 @@
 include LICENSE
+include MANIFEST.in
+include requirements.txt
+include README.md

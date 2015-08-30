@@ -10,6 +10,8 @@ $ pip install movienamer
 
 ## Usage
 
+![movienamer](https://raw.githubusercontent.com/divijbindlish/movienamer/master/docs/movienamer.gif)
+
 ```sh
 $ movienamer movie [movie ...]
 ```

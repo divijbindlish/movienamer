@@ -39,12 +39,13 @@ def movienamer(movie):
         if os.path.isfile(dest):
             print 'File already exists: ' + dest
             print 'Overwrite?'
-            final_confirmation = raw_input('([y]/n/q)').lower()
+            final_confirmation = raw_input('([y]/n/q)'.encode('utf-8')).lower()
             if final_confirmation == '':
                 final_confirmation = 'y'
 
             if final_confirmation not in ['y', 'n', 'q']:
-                final_confirmation = raw_input('([y]/n/q)').lower()
+                final_confirmation = raw_input(
+                    '([y]/n/q)'.encode('utf-8')).lower()
                 if final_confirmation == '':
                     final_confirmation = 'y'
 
@@ -94,7 +95,7 @@ def main():
         for filename in args['movie']:
             _, extension = os.path.splitext(filename)
             if extension in video_extensions:
-                movies.append(root + '/' + filename)
+                movies.append(filename)
             else:
                 errors.append(filename)
 

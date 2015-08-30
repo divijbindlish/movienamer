@@ -22,13 +22,13 @@ def _confirm_single(result, filename, extension):
     input_to_action_map = {'y': 'YES', 'n': 'SKIP', 'q': 'QUIT'}
 
     text = _confirmation_text_single(result, filename, extension)
-    confirmation = raw_input(text)
+    confirmation = raw_input(text.encode('utf-8'))
     if confirmation == '':
         confirmation = 'y'
 
     while confirmation not in input_to_action_map.keys():
         confirmation = raw_input(
-            '\n'.join(['Rename?', '([y]/n/q)', ''])).lower()
+            '\n'.join(['Rename?', '([y]/n/q)', '']).encode('utf-8')).lower()
         if confirmation == '':
             confirmation = 'y'
 
@@ -99,7 +99,7 @@ def _confirm_multiple(results, start, filename, extension):
     else:
         text = '\n'.join(_combine_multiple_options(results, start))
 
-    confirmation = raw_input(text).lower()
+    confirmation = raw_input(text.encode('utf-8')).lower()
     if confirmation == '':
         confirmation = str(start+1)
 
@@ -107,7 +107,8 @@ def _confirm_multiple(results, start, filename, extension):
         return _confirm_multiple(results, start+N, filename, extension)
 
     while confirmation not in actions:
-        confirmation = raw_input(_final_line_multiple(len(results), start))
+        confirmation = raw_input(
+            _final_line_multiple(len(results), start).encode('utf-8'))
         if confirmation == '':
             confirmation = str(start+1)
 

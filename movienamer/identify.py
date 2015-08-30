@@ -86,6 +86,9 @@ def identify(filename, directory=None):
         except TypeError:
             results[i]['year'] = None
 
+    if len(results) == 0:
+        return []
+
     max_distance = 1 + max([result['distance'] for result in results])
     return sorted(
         results,

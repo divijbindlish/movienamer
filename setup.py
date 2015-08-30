@@ -15,7 +15,7 @@ setup(
     name='movienamer',
     version=__import__('movienamer').get_version(),
     author='Divij Bindlish',
-    author_email='me@divijbindlish.com',
+    author_email='dvjbndlsh93@gmail.com',
     description='Command-line utility to organize movies',
     license='MIT',
     long_description=description,

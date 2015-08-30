@@ -1,8 +1,11 @@
 import os
 from setuptools import setup
 
-with open('requirements.txt') as f:
+with open(os.path.join(os.path.dirname(__file__), 'requirements.txt')) as f:
     required = f.read().splitlines()
+
+with open(os.path.join(os.path.dirname(__file__), 'README.md')) as f:
+    description = f.read()
 
 packages = [
     'movienamer'
@@ -10,10 +13,12 @@ packages = [
 
 setup(
     name='movienamer',
-    version='0.0.1',
+    version=__import__('movienamer').get_version(),
     author='Divij Bindlish',
     author_email='me@divijbindlish.com',
-    description='Command-line utility to properly organize movies',
+    description='Command-line utility to organize movies',
+    license='MIT',
+    long_description=description,
     url='https://github.com/divijbindlish/movienamer',
     install_requires=required,
     packages=packages,

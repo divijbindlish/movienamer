@@ -13,7 +13,7 @@ packages = [
 
 setup(
     name='movienamer',
-    version=__import__('movienamer').get_version(),
+    version=__import__('movienamer').__version__,
     author='Divij Bindlish',
     author_email='dvjbndlsh93@gmail.com',
     description='Command-line utility to organize movies',

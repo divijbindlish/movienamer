@@ -13,13 +13,13 @@ def movienamer(movie):
 
     results = identify(filename, directory)
     if len(results) == 0:
-        print 'No results found. Skipping movie file'
+        print 'No results found. Skipping movie file\n'
         return False
 
     action = confirm(results, filename, extension)
 
     if action == 'SKIP':
-        print 'Skipping movie file'
+        print 'Skipping movie file\n'
         return False
     elif action == 'QUIT':
         print 'Exiting movienamer'

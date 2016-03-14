@@ -8,6 +8,10 @@ TMDB_HOST = 'http://api.themoviedb.org/3'
 
 
 def search(name, year=None):
+    '''
+    Query TMDb API with provided information (name and year) and return list
+    (possibly empty) of results.
+    '''
     if name is None or name == '':
         raise Exception
 

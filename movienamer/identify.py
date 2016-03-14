@@ -1,100 +1,103 @@
 import os.path as path
 import re
 
-import Levenshtein
-
-from .sanitize import sanitize
 from .tmdb import search
+from .distance import compute_distance
 
 
-def _gather(filename, directory=None, titles={}):
-    # Sanitize the input filename
-    name, year = sanitize(filename)
+def _query(guess):
+    '''
+    Take guess dictionary (guessit) and query TMDb using movienamer.tmdb and
+    return query string and list (possibly empty) of results.
+    '''
+    if 'title' not in guess:
+        raise Exception
 
-    # Start with a basic search
-    results = search(name, year)
+    name = guess['title']
+    if 'alternative_title' in guess:
+        name = name + ' ' + guess['alternative_title']
 
-    if year is not None and len(results) == 0:
-        # If no results are found when year is present,
-        # allow a tolerance of 1 in the year
-        results = search(name, year + 1)
-        results = results + search(name, year - 1)
+    year = None
+    if 'year' in guess:
+        year = guess['year']
 
-    # Try to find a result with zero error and return
-    zero_distance_results = []
-    for i, result in enumerate(results):
-        distance = Levenshtein.distance(
-            unicode(re.sub('[^a-zA-Z0-9]', '', name.lower())),
-            unicode(re.sub('[^a-zA-Z0-9]', '', result['title'].lower()))
-        )
-
-        # Update the results with the distance
-        result['distance'] = distance
-        results[i]['distance'] = distance
-
-        # Update the results with year
-        result['with_year'] = (year is not None)
-        results[i]['with_year'] = (year is not None)
-
-        # Add count field to the result
-        result['count'] = 1
-        results[i]['count'] = 1
-
-        if distance == 0:
-            zero_distance_results.append(result)
-
-    if len(zero_distance_results) > 0:
-        # Directly return results with zero error
-        return zero_distance_results
-
-    if year is not None and len(results) > 0:
-        # Directly return results which were queried with year
-        return results
-
-    # If neither zero distance results are present nor is the year,
-    # accumulate results from directory one level up
-    if directory is not None:
-        dirname = directory.split('/')[-1]
-        results_from_directory = _gather(dirname)
-
-        results_to_be_removed = []
-
-        # Increment count for all duplicate results
-        for i, r1 in enumerate(results):
-            for r2 in results_from_directory:
-                if r1['popularity'] == r2['popularity']:
-                    # Check with popularity since title can be duplicate
-                    results[i]['count'] += r2['count']
-                    results_from_directory.remove(r2)
-                    break
-
-        results = results + results_from_directory
-
-    return results
+    return name, tmdb.search('movie', name, year)
 
 
-def identify(filename, directory=None):
-    if directory == '' or directory == '.' or directory == '..':
-        directory = None
+class Identifier:
+    '''
+    Class for identifying a movie based on it's filename.
 
-    results = _gather(filename, directory)
-    for i, result in enumerate(results):
-        # Add year to all the results
-        try:
-            results[i]['year'] = re.findall(
-                '[0-9]{4}', result['release_date'])[0]
-        except TypeError:
-            results[i]['year'] = None
+    Provided methods:
+    next(): Continue (or start) identification process in case the user does
+            not accept any of the matched movies. Returns a list of results.
+    '''
 
-    if len(results) == 0:
-        return []
+    def __init__(filename):
+        self.full_path = path.abspath(filename)
+        self._state = 0
+        self.query = ''
+        self.results = []
 
-    max_distance = 1 + max([result['distance'] for result in results])
-    return sorted(
-        results,
-        key=lambda r: ((r['count'] ** 1.1) *
-                       ((max_distance - r['distance'])) *
-                       ((1 + r['with_year'])) *
-                       ((r['popularity']))),
-        reverse=True
-    )
+    def next():
+        if self._state == 0:
+            # Beginning of identification, show zero distance results
+            filename = path.basename(path.splitext(self.full_path)[0])
+            guess = guessit(filename)
+
+            self.query, self.results = _query(guess)
+            if len(self.results) == 0:
+                self._state = 2
+                return self.next()
+
+            zero_distance_results = filter(
+                lambda result: compute_distance(query, result['title']) == 0,
+                results
+            )
+
+            if len(zero_distance_results) == 0:
+                self._state = 1
+                return self.next()
+
+            self._state += 1
+            return zero_distance_results
+
+        if self._state == 1:
+            # Zero distance results weren't enough
+            self._state += 1
+            return self.results
+
+        if self._state == 2:
+            # No identification from filename guess, show results from parent
+            parent_directory = path.basename(path.dirname(self.full_path))
+            if parent_directory == '':
+                self._state = 4
+                return self.next()
+
+            parent_guess = guessit(parent_directory)
+
+            self.query, self.results = _query(self.parent_guess)
+            if len(self.results) == 0:
+                self._state = 4
+                return self.next()
+
+            zero_distance_results = filter(
+                lambda result: compute_distance(query, result['title']) == 0,
+                results
+            )
+
+            if len(zero_distance_results) == 0:
+                self._state = 3
+                return self.next()
+
+            self._state += 1
+            return zero_distance_results
+
+        if self._state == 3:
+            # Return all results for parent
+            self._state += 1
+            return self.results
+
+        if self._state == 4:
+            # We didn't find anything
+            return []

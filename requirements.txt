@@ -1,4 +1,9 @@
+babelfish==0.5.5
+guessit==2.0.4
 nose==1.3.7
+python-dateutil==2.5.0
 python-Levenshtein==0.12.0
+rebulk==0.7.1
 requests==2.7.0
+six==1.10.0
 wheel==0.24.0

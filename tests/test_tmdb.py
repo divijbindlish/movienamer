@@ -17,6 +17,6 @@ class TMDbTest(unittest.TestCase):
         self.assertTrue('release_date' in movie)
         self.assertTrue('popularity' in movie)
 
-        empty_list = tmdb.search('!@#$%^&*()')
+        empty_list = tmdb.search('abcdefghijklmnopqrstuvwxyz')
         self.assertIsInstance(empty_list, list)
         self.assertEqual(len(empty_list), 0)

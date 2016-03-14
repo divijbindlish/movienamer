@@ -2,6 +2,6 @@
 build/
 dist/
 
-env/
+*.sublime-*
 
 *.pyc
